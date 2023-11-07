@@ -1,0 +1,47 @@
+INFO: 
+*******
+This script MAY help you. You *should* have run "npx react-native doctor"
+and fixed the issues first. This may help you with issues there if you can't figure out why doctor is failing.
+      
+BUT DO NOT try to run-android without BOTH "doctor" and this script reporting success.
+      
+Note that "WARN:" does not mean "Error", it means "be sure this is correct."
+
+All output from this script will be logged to reactnative-fixup.txt
+*********** 
+      
+
+INFO: Found npm. [455]
+INFO: JAVA_HOME is set to C:\Program Files\Java\jdk-20 [656]
+INFO: JAVA_HOME points to an existing directory. [660]
+INFO: java is in your path. [636]
+INFO: Detected version "20.0.2" of Java. [727]
+INFO: Java version is correct. [731]
+INFO: java executable location matches up with JAVA_HOME. [672]
+INFO: SDK and JDK paths appear to be good. [710]
+INFO: Environment var(s) point to an Android SDK location C:\Users\LongVu\AppData\Local\Android\Sdk. [775]
+INFO: Android SDK appears to exist. [779]
+INFO: (homebrew is not required on Windows) [500]
+FATAL: This project is NOT under git management (!) [467]
+INFO: do "git init", "git add ." and "git commit -m'Initial commit'" [468]
+INFO: We are in an NPM project. [474]
+INFO: We are really in a React-native project. [482]
+INFO: Confirmed: this is a CLI project. [493]
+INFO: Confirmed: this is not an expo rebuild/exported project. [516]
+INFO: Found adb. [584]
+INFO: (Watchman is not required on Windows.) [555]
+INFO: (ios-deploy is not required on Windows.) [569]
+INFO: (Cocoapods is not required on Windows.) [524]
+INFO: (xcode-select is not required on Windows.) [538]
+INFO: keytool is in path. [594]
+INFO: Found emulator. [609]
+INFO: Found current version of bundletool. [624]
+INFO: Correct NDK is installed. [796]
+INFO: Command-line tools are in path. [788]
+INFO: (JAVA_VERSION is not needed for Windows) [825]
+INFO: Android SDK build-tools version 30.0.3 exists. [808]
+INFO: Android SDK build-tools version 33.0.0 exists. [808]
+INFO: Android SDK build-tools version 34.0.0 exists. [808]
+INFO: (All build-tools versions exist) [816]
+INFO: Exiting... [1193]
+*** Message type counts: 1 fatal, 0 warn, 0 error, 33 info
