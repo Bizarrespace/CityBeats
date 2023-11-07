@@ -10,7 +10,7 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView>
-        <Text>Hello Test</Text>
+        <Text>Hello Github new Branch</Text>
       </SafeAreaView>
     </SafeAreaProvider>
   );
