@@ -22,8 +22,7 @@ INFO: SDK and JDK paths appear to be good. [710]
 INFO: Environment var(s) point to an Android SDK location C:\Users\LongVu\AppData\Local\Android\Sdk. [775]
 INFO: Android SDK appears to exist. [779]
 INFO: (homebrew is not required on Windows) [500]
-FATAL: This project is NOT under git management (!) [467]
-INFO: do "git init", "git add ." and "git commit -m'Initial commit'" [468]
+INFO: Project is git-controlled. [464]
 INFO: We are in an NPM project. [474]
 INFO: We are really in a React-native project. [482]
 INFO: Confirmed: this is a CLI project. [493]
@@ -43,5 +42,72 @@ INFO: Android SDK build-tools version 30.0.3 exists. [808]
 INFO: Android SDK build-tools version 33.0.0 exists. [808]
 INFO: Android SDK build-tools version 34.0.0 exists. [808]
 INFO: (All build-tools versions exist) [816]
-INFO: Exiting... [1193]
-*** Message type counts: 1 fatal, 0 warn, 0 error, 33 info
+INFO: Checking [newest published] npm package versions... [747]
+WARN: Expecting version ^6.6.4 of @react-navigation/drawer but found ^6.6.6 [755]
+WARN: Expecting version ^6.1.8 of @react-navigation/native but found ^6.1.9 [755]
+WARN: Expecting version ^6.9.14 of @react-navigation/native-stack but found ^6.9.17 [755]
+WARN: Expecting version ^6.3.18 of @react-navigation/stack but found ^6.3.20 [755]
+WARN: Expecting version ^2.13.2 of react-native-gesture-handler but found ^2.13.4 [755]
+WARN: Expecting version ^4.7.2 of react-native-safe-area-context but found ^4.7.4 [755]
+WARN: Expecting version ^3.25.0 of react-native-screens but found ^3.27.0 [755]
+INFO: (Tell BJM or write an issue against this script on GitHub) [762]
+INFO: ...Done checking npm package versions. [764]
+INFO: Adding @react-native-masked-view/masked-view ^0.3.0 [1022]
+INFO: Adding @react-navigation/drawer ^6.6.4 [1022]
+INFO: Adding @react-navigation/native ^6.1.8 [1022]
+INFO: Adding @react-navigation/native-stack ^6.9.14 [1022]
+INFO: Adding @react-navigation/stack ^6.3.18 [1022]
+INFO: Adding react-native-asset ^2.1.1 [1022]
+INFO: react (18.2.0) is present and up to date [1034]
+INFO: react-native (0.72.6) is present and up to date [1034]
+INFO: Adding react-native-gesture-handler ^2.13.2 [1022]
+INFO: Adding react-native-reanimated ^3.5.4 [1022]
+INFO: Adding react-native-safe-area-context ^4.7.2 [1022]
+INFO: Adding react-native-screens ^3.25.0 [1022]
+INFO: Backing up package.json to package.json.bak [1045]
+INFO: package.json file adjusted successfully. [1060]
+INFO: App.tsx removed (it was the default version). [995]
+INFO: App.js created. [1006]
+INFO: .prettierrc file created. [1106]
+INFO: assets/fonts dir created [1069]
+INFO: react-native.config.js created. [1079]
+INFO: org.gradle.java.home added or updated in gradle.properties. [965]
+INFO: gradle.properties file updated successfully. [900]
+INFO: android\universal.json file created with contents. [980]
+INFO: Gradle wrapper distributionUrl updated successfully. [940]
+INFO: build.gradle file updated successfully with kotlinVersion. [857]
+INFO: app/build.gradle file updated successfully with signingConfigs. [881]
+INFO: gradle.properties file updated successfully. [922]
+INFO: Keystore generated successfully. [1093]
+INFO: Be sure to:
+
+
+$ npm install
+$ npx react-native-asset
+
+[Then...]
+*sigh* 
+[to run on simulator or connected device]
+
+$ npx react-native run-android
+
+[to build an APK]
+
+$ npx react-native-asset
+
+$ cd android && .\gradlew build && .\gradlew bundleRelease
+$ java -jar "C:\CPSC411\bundletool-all-1.15.5.jar" build-apks --bundle=app\build\outputs\bundle\release\app-release.aab --output=app\build\outputs\apk\release\app-release.apks --mode=universal --ks=..\android/app/my-release-key.jks --ks-pass=pass:12345678 --ks-key-alias=my-key-alias --key-pass=pass:12345678
+
+$ java -jar "C:\CPSC411\bundletool-all-1.15.5.jar" extract-apks --apks=app\build\outputs\apk\release\app-release.apks --output-dir=app\build\outputs\apk\release\ --device-spec=..\android\universal.json
+
+[to build on Mac for IOS]
+
+*Before* your first build (or after you install a new NPM package) you must:
+
+$ sudo gem update cocoapods --pre
+$ npx pod-install
+$ cd ios && pod update && cd ..
+
+
+
+*** Message type counts: 0 fatal, 7 warn, 0 error, 63 info
