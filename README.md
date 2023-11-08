@@ -56,3 +56,5 @@ little on how it was made
 * Now that we have that filtered data, we can pass it into a history.js file for example, and then either flatlist it or something else to make it look good
 * Having just that down will be good, then you can make sure that the API call works and that you are able to get the data that you want from it
 * From there you can move on to see what stats you can get from the JSON as well maybe so that you are able to do the analysis
+  * Can get genre from shazam-songs/get-details
+  * resources, shazam-songs, id, attribute, agenre, primary(could have another field to it too idk)
