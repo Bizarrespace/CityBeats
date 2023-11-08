@@ -39,3 +39,8 @@ little on how it was made
 
 <br> **UI Mocks**
 ![UI Mockup](https://github.com/Bizarrespace/CityBeats/assets/78052960/36bc32c5-dc8d-4dfe-a8bd-418b2efc8042)
+
+# If you want to run
+* Did not push all the files needed for react to run
+* Have your own react native cli up and running, and just change these files:
+ * App.js
