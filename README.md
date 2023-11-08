@@ -45,6 +45,6 @@ little on how it was made
 * Have your own react native cli up and running, and just change these files:
   * App.js
   * package.json
-  * packagelock
+  * package-lock.json
   * in components:
     * About.js
