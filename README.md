@@ -43,4 +43,4 @@ little on how it was made
 # If you want to run
 * Did not push all the files needed for react to run
 * Have your own react native cli up and running, and just change these files:
- * App.js
+  * App.js
