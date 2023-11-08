@@ -1,18 +1,20 @@
 
 import React from 'react';
-import {
-  Text,
-  SafeAreaView,
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import About from './components/About.js';
+
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <SafeAreaView>
-        <Text>Hello Github new Branch</Text>
-        <Text>Testing again to make sure that I have branching set up correctly</Text>
-      </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='About'>
+          <Stack.Screen name = 'About' component = {About} options= {{ title: 'About' }} />
+        </Stack.Navigator>  
+      </NavigationContainer>      
     </SafeAreaProvider>
   );
 }
