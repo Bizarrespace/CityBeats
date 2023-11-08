@@ -44,10 +44,14 @@ little on how it was made
 * Did not push all the files needed for react to run
 * Have your own react native cli up and running, and just change these files:
   * App.js
+  * Home.js
   * package.json
   * package-lock.json
   * in components:
     * About.js
+  * in assets:
+    * logo.png
+  
 
 # How to handle Rapid API request
 * First you have to get the data, so you use axios and then get the data using fetchData, and then do the API request, this will return raw JSON data
