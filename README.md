@@ -48,3 +48,11 @@ little on how it was made
   * package-lock.json
   * in components:
     * About.js
+
+# How to handle Rapid API request
+* First you have to get the data, so you use axios and then get the data using fetchData, and then do the API request, this will return raw JSON data
+* We only want for now Title, image, url so we have to filter out the JSON file to get just that
+  * Make sure after we filter it out, we also save it to an array of objects with each object containing, title, image, and url
+* Now that we have that filtered data, we can pass it into a history.js file for example, and then either flatlist it or something else to make it look good
+* Having just that down will be good, then you can make sure that the API call works and that you are able to get the data that you want from it
+* From there you can move on to see what stats you can get from the JSON as well maybe so that you are able to do the analysis
