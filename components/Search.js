@@ -17,8 +17,8 @@ const Search = ({ route }) => {
 
   useEffect(() => {
     if (listId) {
-      const topSongs = Chart.tracks.map(track => ({
-        title: track.title,
+      const topSongs = Chart.tracks.map((track, index) => ({
+        title: `${index + 1}. ${track.title}`,
         url: track.url,
         image: track.images?.coverart || 'https://via.placeholder.com/150' // default image if coverart is null
       }));
@@ -27,11 +27,12 @@ const Search = ({ route }) => {
   }, [listId]);
 
   const renderItem = ({ item }) => (
-    <View>
-      <Text style={{ color: 'black' }}>{item.title}</Text>
+    <View style={{ alignItems: 'center' }}>
+      <Text style={{ color: 'black', fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
       <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
-        <Image source={{ uri: item.image }} style={{ width: 50, height: 50 }} />
+        <Image source={{ uri: item.image }} style={{ width: 125, height: 125, marginTop: 10 }} />
       </TouchableOpacity>
+      <View style={{ height: 50 }} />
     </View>
   );
 
@@ -48,3 +49,4 @@ const Search = ({ route }) => {
 };
 
 export default Search;
+
