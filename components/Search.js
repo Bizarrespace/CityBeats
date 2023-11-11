@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, FlatList, Image, TouchableOpacity, Linking } from 'react-native';
+import { Text, View, FlatList, Image, TouchableOpacity, Linking, Button } from 'react-native';
 import Citys from './Citys.json';
 import Chart from './Chart.json';
 
-const Search = ({ route }) => {
+const Search = ({ route, navigation }) => {
   const [listId, setListId] = useState('');
   const [songs, setSongs] = useState([]);
   const city = route.params?.city || '';
@@ -25,6 +25,19 @@ const Search = ({ route }) => {
       setSongs(topSongs);
     }
   }, [listId]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          title="History"
+          onPress={() => {
+            navigation.navigate('History', { songs: songs, city: city });
+          }}
+        />
+      ),
+    });
+  }, [navigation, songs]);
 
   const renderItem = ({ item }) => (
     <View style={{ alignItems: 'center' }}>
