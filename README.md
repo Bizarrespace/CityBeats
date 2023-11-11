@@ -47,6 +47,8 @@ little on how it was made
   * App.js
   * package.json
   * package-lock.json
+  * Citys.json
+  * Chart.json
   * in components:
     * About.js
     * Search.js
