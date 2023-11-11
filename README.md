@@ -51,6 +51,7 @@ little on how it was made
     * About.js
     * Search.js
     * Home.js
+    * History.js
   * in assets:
     * logo.png
   
