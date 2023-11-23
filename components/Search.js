@@ -74,6 +74,7 @@ const Search = ({ route, navigation }) => {
           const topSongs = response.data.tracks.map((track, index) => ({
             title: `${index + 1}. ${track.title}`,
             url: track.url,
+            artist: track.subtitle,
             image: track.images?.coverart || 'https://via.placeholder.com/150' // default image if coverart is null
           }));
           setSongs(topSongs); // Set top songs
