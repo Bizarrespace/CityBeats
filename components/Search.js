@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, FlatList, Image, TouchableOpacity, Linking, Button, Alert, TextInput, StyleSheet } from 'react-native';
 import Citys from './Citys.json'; // Importing city data
 import Chart from './Chart.json'; // Importing chart data
+import axios from 'axios';
 
 // Search component
 const Search = ({ route, navigation }) => {
@@ -15,31 +16,69 @@ const Search = ({ route, navigation }) => {
 
   // Effect hook to handle city data
   useEffect(() => {
-    // Find city data
-    //Reason we needed to flaten the Citys json file here is because the find functions needs a flat array in order to make it work
-    //So the flatmap function transforms the nested struture of the Citys.json into a single array
-    const cityData = Citys.countries.flatMap(country => country.cities).find(cityItem => cityItem.name === city);
-    if (cityData) {
-      // If city data is found, set list ID and reset city not found flag
-      setListId(cityData.listid);
-      setCityNotFound(false);
-    } else {
-      // If city data is not found, set city not found flag and show alert
-      setCityNotFound(true);
-      Alert.alert('City not found', `The city ${city} was not found. Please enter another city.`);
-    }
+    // Define the API call options
+    const options = {
+      method: 'GET',
+      url: 'https://shazam.p.rapidapi.com/charts/list',
+      headers: {
+        'X-RapidAPI-Key': '1de34a892dmsh35fa39ad32c4339p131699jsn01632568968e',
+        'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+      }
+    };
+  
+    // Make the API call
+    axios.request(options)
+      .then(response => {
+        // Use the response data
+        const cityData = response.data.countries.flatMap(country => country.cities).find(cityItem => cityItem.name === city);
+        if (cityData) {
+          // If city data is found, set list ID and reset city not found flag
+          setListId(cityData.listid);
+          setCityNotFound(false);
+        } else {
+          // If city data is not found, set city not found flag and show alert
+          setCityNotFound(true);
+          Alert.alert('City not found', `The city ${city} was not found. Please enter another city.`);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }, [city]);
 
   // Effect hook to handle list ID changes
   useEffect(() => {
     if (listId) {
-      // If list ID is present, map chart tracks to top songs
-      const topSongs = Chart.tracks.map((track, index) => ({
-        title: `${index + 1}. ${track.title}`,
-        url: track.url,
-        image: track.images?.coverart || 'https://via.placeholder.com/150' // default image if coverart is null
-      }));
-      setSongs(topSongs); // Set top songs
+      // Define the API call options
+      const options = {
+        method: 'GET',
+        url: 'https://shazam.p.rapidapi.com/charts/track',
+        params: {
+          locale: 'en-US',
+          listId: listId,
+          pageSize: '20',
+          startFrom: '0'
+        },
+        headers: {
+          'X-RapidAPI-Key': '1de34a892dmsh35fa39ad32c4339p131699jsn01632568968e',
+          'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
+        }
+      };
+  
+      // Make the API call
+      axios.request(options)
+        .then(response => {
+          // Map chart tracks to top songs
+          const topSongs = response.data.tracks.map((track, index) => ({
+            title: `${index + 1}. ${track.title}`,
+            url: track.url,
+            image: track.images?.coverart || 'https://via.placeholder.com/150' // default image if coverart is null
+          }));
+          setSongs(topSongs); // Set top songs
+        })
+        .catch(error => {
+          console.error(error);
+        });
     }
   }, [listId]);
 
