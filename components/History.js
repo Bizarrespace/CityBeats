@@ -68,8 +68,9 @@ const History = () => {
     });
 
     if (Object.keys(songOccurrenceCount).length > 0) {
-      const mostFrequent = Object.values(songOccurrenceCount).reduce((a, b) => a.count > b.count ? a : b);
-      setMostFrequentSongData(mostFrequent);
+      const highestFrequency = Math.max(...Object.values(songOccurrenceCount).map(songData => songData.count));
+      const mostFrequentSongs = Object.values(songOccurrenceCount).filter(songData => songData.count === highestFrequency);
+      setMostFrequentSongData(mostFrequentSongs);
     }
 
   }, [allCitiesData]);
@@ -79,12 +80,17 @@ const History = () => {
       <Button title="Remove City from History" onPress={resetHistory} />
       {mostFrequentSongData && (
         <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>Most Frequent Song</Text>
-          <Text style={{ fontSize: 16, color: '#333' }}>{mostFrequentSongData.song.title.replace(/^\d+\.\s/, '')}</Text>
-          <Text style={{ fontSize: 16, color: '#333' }}>Count: {mostFrequentSongData.count}</Text>
-          <TouchableOpacity onPress={() => Linking.openURL(mostFrequentSongData.song.url)}>
-            <Image source={{ uri: mostFrequentSongData.song.image }} style={{ width: 125, height: 125, marginTop: 10 }} />
-          </TouchableOpacity>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>Most Frequent Songs</Text>
+          {mostFrequentSongData.map((songData, index) => (
+            <View key={index} style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, color: '#333' }}>{songData.song.title.replace(/^\d+\.\s/, '')}</Text>
+              <Text style={{ fontSize: 16, color: '#333' }}>By: {songData.song.artist}</Text>
+              <Text style={{ fontSize: 16, color: '#333' }}>Count: {songData.count}</Text>
+              <TouchableOpacity onPress={() => Linking.openURL(songData.song.url)}>
+                <Image source={{ uri: songData.song.image }} style={{ width: 125, height: 125, marginTop: 10 }} />
+              </TouchableOpacity>
+            </View>
+          ))}
         </View>
       )}
       <Dialog.Container visible={dialogVisible}>
@@ -108,6 +114,7 @@ const History = () => {
             <List.Item
               key={songIndex}
               title={song.title}
+              description={song.artist}
               left={() => (
                 <TouchableOpacity onPress={() => Linking.openURL(song.url)}>
                   <Image source={{ uri: song.image || 'https://via.placeholder.com/150' }} style={{ width: 125, height: 125, marginTop: 10 }} />
