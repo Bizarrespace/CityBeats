@@ -4,6 +4,7 @@ import { Text, View, FlatList, Image, TouchableOpacity, Linking, Button, Alert, 
 import Citys from './Citys.json'; // Importing city data
 import Chart from './Chart.json'; // Importing chart data
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Search component
 const Search = ({ route, navigation }) => {
@@ -14,6 +15,7 @@ const Search = ({ route, navigation }) => {
   const [inputCity, setInputCity] = useState(''); // Input city name
   const [cityNotFound, setCityNotFound] = useState(false); // Flag for city not found
 
+  
   // Effect hook to handle city data
   useEffect(() => {
     // Define the API call options
@@ -75,12 +77,45 @@ const Search = ({ route, navigation }) => {
             image: track.images?.coverart || 'https://via.placeholder.com/150' // default image if coverart is null
           }));
           setSongs(topSongs); // Set top songs
+          // Save the songs and the date they were added
+          AsyncStorage.setItem(city, JSON.stringify({ songs: topSongs, dateAdded: new Date() }));
         })
         .catch(error => {
           console.error(error);
         });
     }
   }, [listId]);
+
+  //********************************************OLD USE EFFECT */
+//   // Effect hook to handle city data
+// useEffect(() => {
+//   // Use the response data
+//   const cityData = Citys.countries.flatMap(country => country.cities).find(cityItem => cityItem.name === city);
+//   if (cityData) {
+//     // If city data is found, set list ID and reset city not found flag
+//     setListId(cityData.listid);
+//     setCityNotFound(false);
+//   } else {
+//     // If city data is not found, set city not found flag and show alert
+//     setCityNotFound(true);
+//     Alert.alert('City not found', `The city ${city} was not found. Please enter another city.`);
+//   }
+// }, [city]);
+
+// // Effect hook to handle list ID changes
+// useEffect(() => {
+//   if (listId) {
+//     // Map chart tracks to top songs
+//     const topSongs = Chart.tracks.map((track, index) => ({
+//       title: `${index + 1}. ${track.title}`,
+//       url: track.url,
+//       image: track.images?.coverart || 'https://via.placeholder.com/150' // default image if coverart is null
+//     }));
+//     setSongs(topSongs); // Set top songs
+//   }
+// }, [listId]);
+
+
 
   // Effect hook to handle navigation options
   useEffect(() => {

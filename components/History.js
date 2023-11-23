@@ -1,65 +1,91 @@
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, Linking, ScrollView } from 'react-native';
+import { Image, TouchableOpacity, Linking, ScrollView, Button, Alert } from 'react-native';
 import { List } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Dialog from "react-native-dialog";
 
-// History component to display the history of searched songs
-const History = ({ route }) => {
-  // State variable to hold the array of song objects
-  const [songs, setSongs] = useState([]);
-  // Fetching the song data from the Search component
-  const songsData = route.params?.songs || [];
-  // Fetching the city name from the Search component
-  const cityName = route.params?.city
-  // State variable to manage the accordion state
+const History = () => {
+  const [citySongs, setCitySongs] = useState([]);
   const [expanded, setExpanded] = useState(null);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [cityToRemove, setCityToRemove] = useState('');
 
-  //Effect hook to set songs object into the array of songs objects
+
   useEffect(() => {
-    // We need to check if songsData is not empty before setting the state.
-    // If we don't, and songsData is empty, it will trigger an infinite loop.
-    // This is because setting the state with an empty songsData is considered a state change,
-    // which triggers the useEffect hook again, creating the loop.
-    if (songsData && songsData.length > 0) {
-      setSongs(songsData);
-    }
-  }, [songsData]);
+    AsyncStorage.getAllKeys()
+      .then(keys => {
+        return AsyncStorage.multiGet(keys);
+      })
+      .then(items => {
+        const songs = items.map(item => {
+          const data = JSON.parse(item[1]);
+          return {
+            city: item[0],
+            songs: data.songs,
+            dateAdded: new Date(data.dateAdded)
+          };
+        });
 
-  //Function to take care of only opening and closing the right accordion
+        songs.sort((a, b) => b.dateAdded - a.dateAdded);
+        setCitySongs(songs);
+      });
+  }, []);
+
+  const resetHistory = () => {
+    setDialogVisible(true);
+  };
+
+  const handleDialogSubmit = () => {
+    const cityExists = citySongs.some(citySong => citySong.city === cityToRemove);
+    if (!cityExists) {
+      Alert.alert('Error', 'That City does not exist in history');
+      return;
+    }
+    AsyncStorage.removeItem(cityToRemove).then(() => {
+      const updatedCitySongs = citySongs.filter(citySong => citySong.city !== cityToRemove);
+      setCitySongs(updatedCitySongs);
+    });
+    setDialogVisible(false);
+    setCityToRemove(''); // Reset the input
+  };
+
   const handlePress = (index) => setExpanded(expanded === index ? null : index);
 
-  // Rendering the History component
   return (
     <ScrollView style={{ flex: 1 }}>
-      <List.Accordion
-        title={cityName}
-        expanded={expanded === 0}
-        onPress={() => handlePress(0)}
-      >
-        {/* Mapping through the songs array and creating a List.Item for each song */}
-        {songs.map((song, index) => (
-          <List.Item
-            key={index} // Using the index as a key for each List.Item
-            title={song.title} // Setting the title of the List.Item to the song's title
-            left={() => (
-              // Creating a TouchableOpacity that opens the song's URL when pressed
-              <TouchableOpacity onPress={() => Linking.openURL(song.url)}>
-                {/* Displaying the song's image, or a placeholder image if the song's image is not available */}
-                <Image source={{ uri: song.image || 'https://via.placeholder.com/150'}} style={{ width: 125, height: 125, marginTop: 10 }} />
-              </TouchableOpacity>
-            )}
-          />
-        ))}
-      </List.Accordion>
-      <List.Accordion
-      title="Test"
-      expanded={expanded === 1}
-      onPress={() => handlePress(1)}
-      >
-        <Image source={{ uri: 'https://via.placeholder.com/150'}} style={{ width: 125, height: 125, marginTop:10}} />
-      </List.Accordion>
+      <Button title="Remove City from History" onPress={resetHistory} />
+      <Dialog.Container visible={dialogVisible}>
+        <Dialog.Title>Enter city name</Dialog.Title>
+        <Dialog.Description>
+          Enter the name of the city you want to remove from the history
+        </Dialog.Description>
+        <Dialog.Input onChangeText={setCityToRemove}></Dialog.Input>
+        <Dialog.Button label="Cancel" onPress={() => setDialogVisible(false)} />
+        <Dialog.Button label="Delete" onPress={handleDialogSubmit} />
+      </Dialog.Container>
+      {citySongs.map((citySong, index) => (
+        <List.Accordion
+          key={index}
+          title={`${citySong.city} (${citySong.dateAdded.toLocaleDateString()} ${citySong.dateAdded.toLocaleTimeString()})`}
+          expanded={expanded === index}
+          onPress={() => handlePress(index)}
+          right={() =>  <Image source={require('../assets/right.png')} style={{ width: 25, height: 25 }} />}
+        >
+          {citySong.songs.map((song, songIndex) => (
+            <List.Item
+              key={songIndex}
+              title={song.title}
+              left={() => (
+                <TouchableOpacity onPress={() => Linking.openURL(song.url)}>
+                  <Image source={{ uri: song.image || 'https://via.placeholder.com/150' }} style={{ width: 125, height: 125, marginTop: 10 }} />
+                </TouchableOpacity>
+              )}
+            />
+          ))}
+        </List.Accordion>
+      ))}
     </ScrollView>
   );
 };
 
-// Exporting the History component
 export default History;
