@@ -34,7 +34,7 @@ const Home = ({ navigation }) => {
           style={styles.input}
           placeholder='Enter City'
           placeholderTextColor="black"
-          onChangeText={text => setCity(text)}
+          onChangeText={text => setCity(text.trim())}
           value={city}
           onSubmitEditing={handleSearch}
         />
