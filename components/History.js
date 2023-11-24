@@ -4,8 +4,10 @@ import { List } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Dialog from "react-native-dialog";
 import { PieChart } from 'react-native-chart-kit';
+import { useNavigation } from '@react-navigation/native';
 
 const History = () => {
+  const navigation = useNavigation();
   const [allCitiesData, setAllCitiesData] = useState([]);
   const [expanded, setExpanded] = useState(null);
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -62,6 +64,7 @@ const History = () => {
   const removeAllData = () => {
     AsyncStorage.clear().then(() => {
       setAllCitiesData([]);
+      navigation.navigate('Home');
     });
   };
 
@@ -91,9 +94,18 @@ const History = () => {
       const highestCount = sortedCounts[0];
       const secondHighestCount = sortedCounts[1];
       const thirdHighestCount = sortedCounts[2];
+      const fourHighestCount = sortedCounts[3];
+
+      let songData = [highestCount, secondHighestCount];
+      if (thirdHighestCount > 1) {
+        songData.push(thirdHighestCount);
+      } 
+      if (fourHighestCount > 1){
+        songData.push(fourHighestCount);
+      }
 
       mostFrequentSongs = Object.values(songOccurrenceCount).filter(
-        songData => [highestCount, secondHighestCount, thirdHighestCount].includes(songData.count)
+        songDataItem => songData.includes(songDataItem.count)
       );
 
       mostFrequentSongs.sort((a, b) => b.count - a.count);
@@ -184,6 +196,7 @@ const History = () => {
       {mostFrequentSongData && (
         <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
           <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'black' }}>Most Frequent Songs</Text>
+          <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', paddingTop: 10 }}>Total Songs: {mostFrequentSongData.length}</Text>
           {mostFrequentSongData.map((songData, index) => (
             <View key={index} style={{ alignItems: 'center' }}>
               <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', paddingTop: 10 }}>{songData.song.title.replace(/^\d+\.\s/, '')}</Text>

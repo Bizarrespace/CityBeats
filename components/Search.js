@@ -1,8 +1,6 @@
 // Importing necessary modules and components
 import React, { useEffect, useState } from 'react';
-import { Text, View, FlatList, Image, TouchableOpacity, Linking, Button, Alert, TextInput, StyleSheet } from 'react-native';
-import Citys from './Citys.json'; // Importing city data
-import Chart from './Chart.json'; // Importing chart data
+import { Text, View, FlatList, Image, TouchableOpacity, Linking, Button, Alert, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,10 +12,12 @@ const Search = ({ route, navigation }) => {
   const [city, setCity] = useState(route.params?.city || ''); // City name
   const [inputCity, setInputCity] = useState(''); // Input city name
   const [cityNotFound, setCityNotFound] = useState(false); // Flag for city not found
+  const [isLoading, setIsLoading] = useState(false);
 
   
   // Effect hook to handle city data
   useEffect(() => {
+    setIsLoading(true);
     // Define the API call options
     const options = {
       method: 'GET',
@@ -45,12 +45,16 @@ const Search = ({ route, navigation }) => {
       })
       .catch(error => {
         console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [city]);
 
   // Effect hook to handle list ID changes
   useEffect(() => {
     if (listId) {
+      setIsLoading(true);
       // Define the API call options
       const options = {
         method: 'GET',
@@ -83,6 +87,9 @@ const Search = ({ route, navigation }) => {
         })
         .catch(error => {
           console.error(error);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   }, [listId]);
@@ -147,7 +154,9 @@ const Search = ({ route, navigation }) => {
   // Return the component view
   return (
     <View style={styles.container}>
-      {cityNotFound ? (
+      {isLoading ? (
+      <ActivityIndicator size="large" color="#0000ff" />
+    ) :cityNotFound ? (
         // If city is not found, show input field to enter another city
         <View style={styles.notFoundContainer}>
           <Text style={styles.notFoundText}>City not found</Text>
