@@ -1,6 +1,22 @@
 # CityBeats
 Location music trend analysis app 
 
+# If you want to run
+* Did not push all the files needed for react to run
+* Have your own react native cli up and running, and just change these files:
+  * App.js
+  * package.json
+  * package-lock.json
+  * android manifold in android/app/source/main
+  * in components:
+    * About.js
+    * Search.js
+    * Home.js
+    * History.js
+  * in assets:
+    * logo.png
+    * right.png
+    * 
 <br>**Elevator Pitch**
 <br>City Beasts is an app in react native that leverages the Shazam API to provide 
 users real time music trend analysis in specific cities. This tool is a must have 
@@ -41,21 +57,7 @@ little on how it was made
   <br><img src="https://github.com/Bizarrespace/CityBeats/assets/78052960/36bc32c5-dc8d-4dfe-a8bd-418b2efc8042" alt="UI mock up" style="width: 50%;">
 </p>
 
-# If you want to run
-* Did not push all the files needed for react to run
-* Have your own react native cli up and running, and just change these files:
-  * App.js
-  * package.json
-  * package-lock.json
-  * android manifold
-  * in components:
-    * About.js
-    * Search.js
-    * Home.js
-    * History.js
-  * in assets:
-    * logo.png
-    * right.png
+
   
 
 # How to handle Rapid API request
