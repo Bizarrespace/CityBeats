@@ -1,6 +1,10 @@
 # CityBeats
 Location music trend analysis app 
 
+# Demo
+https://youtu.be/zIzAAnsvLeQ
+
+
 # If you want to run
 * Did not push all the files needed for react to run
 * Have your own react native cli up and running, and just change these files:
