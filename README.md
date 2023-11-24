@@ -47,8 +47,7 @@ little on how it was made
   * App.js
   * package.json
   * package-lock.json
-  * Citys.json
-  * Chart.json
+  * android manifold
   * in components:
     * About.js
     * Search.js
@@ -56,6 +55,7 @@ little on how it was made
     * History.js
   * in assets:
     * logo.png
+    * right.png
   
 
 # How to handle Rapid API request
