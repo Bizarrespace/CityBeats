@@ -97,10 +97,10 @@ const History = () => {
       const fourHighestCount = sortedCounts[3];
 
       let songData = [highestCount, secondHighestCount];
-      if (thirdHighestCount > 1) {
+      if (thirdHighestCount > 2) {
         songData.push(thirdHighestCount);
       } 
-      if (fourHighestCount > 1){
+      if (fourHighestCount > 3){
         songData.push(fourHighestCount);
       }
 
