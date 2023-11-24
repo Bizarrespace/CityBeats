@@ -6,13 +6,14 @@ const Home = ({ navigation }) => {
   const [city, setCity] = useState('');
 
   const handleSearch = () => {
+    const trimmedCity = city.trim();
     Keyboard.dismiss();
     Alert.alert(
       'Confirm City',
-      `You entered ${city}. Is this correct?`,
+      `You entered ${trimmedCity}. Is this correct?`,
       [
         {text: 'No'},
-        {text: 'Yes', onPress: () => navigation.navigate('Search', { city })},
+        {text: 'Yes', onPress: () => navigation.navigate('Search', { city:trimmedCity })},
       ],
       { cancelable: false }
     );
@@ -34,7 +35,7 @@ const Home = ({ navigation }) => {
           style={styles.input}
           placeholder='Enter City'
           placeholderTextColor="black"
-          onChangeText={text => setCity(text.trim())}
+          onChangeText={text => setCity(text)}
           value={city}
           onSubmitEditing={handleSearch}
         />
