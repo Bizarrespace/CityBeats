@@ -37,6 +37,14 @@ const History = () => {
     setDialogVisible(true);
   };
 
+  const generateUniqueColor = (existingColors) => {
+    let color;
+    do {
+      color = '#' + (Math.floor(Math.random() * 16777215).toString(16)).padStart(6, '0');
+    } while (existingColors.includes(color));
+    return color;
+  };
+
   const handleDialogSubmit = () => {
     const cityExists = allCitiesData.some(singleCityData => singleCityData.city === cityToRemove);
     if (!cityExists) {
@@ -50,6 +58,13 @@ const History = () => {
     setDialogVisible(false);
     setCityToRemove(''); // Reset the input
   };
+
+  const removeAllData = () => {
+    AsyncStorage.clear().then(() => {
+      setAllCitiesData([]);
+    });
+  };
+
 
   const handlePress = (index) => setExpanded(expanded === index ? null : index);
 
@@ -70,16 +85,24 @@ const History = () => {
     });
 
     let mostFrequentSongs = null;
-
     if (Object.keys(songOccurrenceCount).length > 0) {
-      const highestFrequency = Math.max(...Object.values(songOccurrenceCount).map(songData => songData.count));
-      mostFrequentSongs = Object.values(songOccurrenceCount).filter(songData => songData.count === highestFrequency);
+      const sortedCounts = [...new Set(Object.values(songOccurrenceCount)
+        .map(songData => songData.count))].sort((a, b) => b - a);
+      const highestCount = sortedCounts[0];
+      const secondHighestCount = sortedCounts[1];
+      const thirdHighestCount = sortedCounts[2];
+
+      mostFrequentSongs = Object.values(songOccurrenceCount).filter(
+        songData => [highestCount, secondHighestCount, thirdHighestCount].includes(songData.count)
+      );
+
+      mostFrequentSongs.sort((a, b) => b.count - a.count);
       setMostFrequentSongData(mostFrequentSongs);
-      console.log(mostFrequentSongs);
+
     }
 
     let songDistribution = {};
-
+    let existingColors = [];
     if (mostFrequentSongs) {
       allCitiesData.forEach(singleCityData => {
         singleCityData.songs.forEach(individualSong => {
@@ -91,16 +114,17 @@ const History = () => {
                 songDistribution[singleCityData.city].songs.push(songTitle);
               }
             } else {
+              let color = generateUniqueColor(existingColors);
+              existingColors.push(color);
               songDistribution[singleCityData.city] = {
                 count: 1,
                 songs: [songTitle],
-                color: '#' + (Math.floor(Math.random() * 16777215).toString(16)).padStart(6, '0') // Generate a random color for each city
+                color: color
               };
             }
           }
         });
       });
-      console.log(songDistribution);
     }
 
     // Convert songDistribution to an array of objects that the PieChart component can use
@@ -114,61 +138,18 @@ const History = () => {
     }));
 
     setPieChartData(pieChartData);
-    console.log(pieChartData)
   }, [allCitiesData]);
 
   return (
     <ScrollView style={{ flex: 1 }}>
+      <TouchableOpacity
+        onPress={removeAllData}
+        style={{ backgroundColor: '#841584', marginBottom: 10,  marginTop: 10, width: 110, height: 40, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', borderRadius: 5 }}
+      >
+        <Text style={{ color: 'white' }}>Remove All Data</Text>
+      </TouchableOpacity>
       <Button title="Remove City from History" onPress={resetHistory} />
-      {mostFrequentSongData && (
-        <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>Most Frequent Songs</Text>
-          {mostFrequentSongData.map((songData, index) => (
-            <View key={index} style={{ alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, color: '#333' }}>{songData.song.title.replace(/^\d+\.\s/, '')}</Text>
-              <Text style={{ fontSize: 16, color: '#333' }}>By: {songData.song.artist}</Text>
-              <Text style={{ fontSize: 16, color: '#333' }}>Count: {songData.count}</Text>
-              <TouchableOpacity onPress={() => Linking.openURL(songData.song.url)}>
-                <Image source={{ uri: songData.song.image }} style={{ width: 125, height: 125, marginTop: 10 }} />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-      )}
-      {pieChartData && (
-        <PieChart
-          data={pieChartData}
-          width={Dimensions.get('window').width - 16}
-          height={220}
-          chartConfig={{
-            backgroundColor: '#1cc910',
-            backgroundGradientFrom: '#eff3ff',
-            backgroundGradientTo: '#efefef',
-            decimalPlaces: 2,
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            style: {
-              borderRadius: 16
-            }
-          }}
-          accessor="count"
-          backgroundColor="transparent"
-          paddingLeft="15"
-          absolute
-        />
-      )}
-      {pieChartData && (
-        <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>Song Distribution by City</Text>
-          {pieChartData.map((cityData, index) => (
-            <View key={index} style={{ alignItems: 'center', marginTop: 10 }}>
-              <Text style={{ fontSize: 20, color: cityData.color, fontWeight: 'bold' }}>{cityData.name}</Text>
-              {cityData.songs.map((song, songIndex) => (
-                <Text key={songIndex} style={{ fontSize: 14, color: '#333' }}>{songIndex + 1}. {song}</Text>
-              ))}
-            </View>
-          ))}
-        </View>
-      )}
+
       <Dialog.Container visible={dialogVisible}>
         <Dialog.Title>Enter city name</Dialog.Title>
         <Dialog.Description>
@@ -200,6 +181,58 @@ const History = () => {
           ))}
         </List.Accordion>
       ))}
+      {mostFrequentSongData && (
+        <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
+          <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'black' }}>Most Frequent Songs</Text>
+          {mostFrequentSongData.map((songData, index) => (
+            <View key={index} style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold', paddingTop: 10 }}>{songData.song.title.replace(/^\d+\.\s/, '')}</Text>
+              <Text style={{ fontSize: 14, color: '#333' }}>By: {songData.song.artist}</Text>
+              <Text style={{ fontSize: 14, color: '#333' }}>Count: {songData.count}</Text>
+              <TouchableOpacity onPress={() => Linking.openURL(songData.song.url)}>
+                <Image source={{ uri: songData.song.image }} style={{ width: 125, height: 125, marginTop: 10 }} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      )}
+      {pieChartData && (
+        <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black' }}>Number of most frequent songs in each city</Text>
+          <PieChart
+            data={pieChartData}
+            width={Dimensions.get('window').width - 16}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#1cc910',
+              backgroundGradientFrom: '#eff3ff',
+              backgroundGradientTo: '#efefef',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: {
+                borderRadius: 16
+              }
+            }}
+            accessor="count"
+            backgroundColor="transparent"
+            paddingLeft="15"
+            absolute
+          />
+        </View>
+      )}
+      {pieChartData && (
+        <View style={{ padding: 20, backgroundColor: '#f8f8f8', margin: 20, borderRadius: 10, alignItems: 'center' }}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>Popular songs by City</Text>
+          {pieChartData.map((cityData, index) => (
+            <View key={index} style={{ alignItems: 'center', marginTop: 10 }}>
+              <Text style={{ fontSize: 25, color: cityData.color, fontWeight: 'bold' }}>{cityData.name}</Text>
+              {cityData.songs.sort().map((song, songIndex) => (
+                <Text key={songIndex} style={{ fontSize: 14, color: '#333' }}>{songIndex + 1}. {song}</Text>
+              ))}
+            </View>
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 };
