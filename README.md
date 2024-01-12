@@ -1,7 +1,30 @@
 # CityBeats
 Location music trend analysis app 
 
+
 Test
+
+=======
+# Demo
+https://youtu.be/zIzAAnsvLeQ
+
+
+# If you want to run
+* Did not push all the files needed for react to run
+* Have your own react native cli up and running, and just change these files:
+  * App.js
+  * package.json
+  * package-lock.json
+  * android manifold in android/app/source/main
+  * in components:
+    * About.js
+    * Search.js
+    * Home.js
+    * History.js
+  * in assets:
+    * logo.png
+    * right.png
+    * 
 
 <br>**Elevator Pitch**
 <br>City Beasts is an app in react native that leverages the Shazam API to provide 
@@ -36,8 +59,22 @@ of that specific search, after they confirm that is the city that they want to l
 * Lastly there is a about screen if they are interested in who made the project and 
 little on how it was made
 
-<br> **UI Flow**
-![FlowUI](https://github.com/Bizarrespace/CityBeats/assets/78052960/a1a49ea0-c3f2-4fa3-8f33-5a740f603a66)
+<p align="center">
+  <br> **UI Flow**
+  <br><img src="https://github.com/Bizarrespace/CityBeats/assets/78052960/a1a49ea0-c3f2-4fa3-8f33-5a740f603a66" alt="FlowUI" style="width: 50%;">
+  <br> **UI Mocks**
+  <br><img src="https://github.com/Bizarrespace/CityBeats/assets/78052960/36bc32c5-dc8d-4dfe-a8bd-418b2efc8042" alt="UI mock up" style="width: 50%;">
+</p>
 
-<br> **UI Mocks**
-![UI Mockup](https://github.com/Bizarrespace/CityBeats/assets/78052960/36bc32c5-dc8d-4dfe-a8bd-418b2efc8042)
+
+  
+
+# How to handle Rapid API request
+* First you have to get the data, so you use axios and then get the data using fetchData, and then do the API request, this will return raw JSON data
+* We only want for now Title, image, url so we have to filter out the JSON file to get just that
+  * Make sure after we filter it out, we also save it to an array of objects with each object containing, title, image, and url
+* Now that we have that filtered data, we can pass it into a history.js file for example, and then either flatlist it or something else to make it look good
+* Having just that down will be good, then you can make sure that the API call works and that you are able to get the data that you want from it
+* From there you can move on to see what stats you can get from the JSON as well maybe so that you are able to do the analysis
+  * Can get genre from shazam-songs/get-details
+  * resources, shazam-songs, id, attribute, agenre, primary(could have another field to it too idk)
