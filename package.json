@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
+    "@babel/preset-flow": "^7.23.3",
     "@babel/runtime": "^7.20.0",
     "@react-native/eslint-config": "^0.72.2",
     "@react-native/metro-config": "^0.72.11",
@@ -54,6 +55,15 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
+  },
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|react-native-linear-gradient|@react-native|react-native-maps)/)"
+    ]
   },
   "version": "0.0.1"
 }
