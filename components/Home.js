@@ -39,7 +39,7 @@ const Home = ({ navigation }) => {
   }, []);
 
   const fetchCityName = (latitude, longitude) => {
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyDTer5VHuvhIBfuOR0_oberzrxtdOig9x0`)
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=`)
       .then(response => response.json())
       .then(data => {
         const cityName = data.results[0].address_components.find(component => component.types.includes('locality')).long_name;
