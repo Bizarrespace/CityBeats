@@ -23,7 +23,7 @@ const Search = ({ route, navigation }) => {
       method: 'GET',
       url: 'https://shazam.p.rapidapi.com/charts/list',
       headers: {
-        'X-RapidAPI-Key': '1de34a892dmsh35fa39ad32c4339p131699jsn01632568968e',
+        'X-RapidAPI-Key': '',
         'X-RapidAPI-Host': 'shazam.p.rapidapi.com'
       }
     };
